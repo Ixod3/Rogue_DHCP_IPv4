@@ -1,5 +1,5 @@
 # Rogue DHCP IPv4
-Rogue DHCP IPv4 network tool
+Rogue DHCP IPv4 with scapy
 
 ## Licence : CC BY-NC
 

