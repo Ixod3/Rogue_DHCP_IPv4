@@ -17,7 +17,7 @@ sudo python3 Rogue_DHCP.py -Ri [interface]
 ## Aide d'utilisation :
 
 ```
-sudo python3 attack.py -h         
+sudo python3 Rogue_DHCP.py -h         
 usage: attack.py [-h] [-R] [-i INTERFACE]
 
 optional arguments:
