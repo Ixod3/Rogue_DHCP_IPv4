@@ -11,7 +11,7 @@ This license lets others remix, adapt, and build upon your work non-commercially
 Example Rogue DHCP :
 
 ```sh
-sudo python3 net4.py -Ri [interface]
+sudo python3 Rogue_DHCP.py -Ri [interface]
 ```
 
 ## Aide d'utilisation :
